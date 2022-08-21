@@ -1,16 +1,17 @@
 <template>
   <div class="">
     <button>Click</button>
-    <EditChannel />
+    <JoinRequest />
+    <CommList />
   </div>
 </template>
 
 <script>
-import EditChannel from "./EditChannel.vue";
-
+import CommList from "./CommList.vue";
+import JoinRequest from "./JoinRequest.vue";
 export default {
   name: "HomePage",
-  components: { EditChannel },
+  components: { CommList, JoinRequest },
 };
 </script>
 
