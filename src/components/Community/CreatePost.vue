@@ -13,9 +13,9 @@
         v-show="isOpen"
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
-        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
-          <div class="flex items-center justify-between">
-            <h3 class="text-2xl">Edit Channel</h3>
+        <form class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
+          <div class="flex items-center justify-between w-96">
+            <h3 class="text-2xl">Create Post</h3>
             <svg
               @click="isOpen = false"
               xmlns="http://www.w3.org/2000/svg"
@@ -34,35 +34,35 @@
           </div>
           <div class="mt-4">
             <div class="flex justify-center">
-              <div class="rounded-full w-28 h-20">
-                <img src="../../assets/home-comm.png" alt="Home community" />
+              <div
+                class="flex items-center justify-center w-full h-60 border-2 border-dashed border-red-400"
+              >
+                <button>Click Here to Upload</button>
               </div>
             </div>
+
             <div class="my-2">
-              <input
-                type="text"
-                placeholder="Channel Name"
-                class="w-full rounded-md"
-              />
-            </div>
-            <div class="my-2">
-              <input
+              <textarea
                 type="text"
                 placeholder="Description"
                 class="w-full rounded-md"
               />
             </div>
-            <button
-              @click="isOpen = false"
-              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
-            >
-              Cancel
-            </button>
-            <button class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">
-              Save
-            </button>
+            <div>
+              <p>Choose Channel</p>
+              <input type="radio" id="vehicle1" name="vehicle1" value="Bike" />
+              <label for="vehicle1"> I have a bike</label><br />
+              <input type="radio" id="vehicle2" name="vehicle2" value="Car" />
+              <label for="vehicle2"> I have a car</label><br />
+            </div>
+
+            <div class="flex justify-center my-2">
+              <button class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">
+                Save
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  name: "EditChannel",
+  name: "CreatePost",
   data() {
     return {
       isOpen: false,

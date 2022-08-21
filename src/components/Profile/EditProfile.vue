@@ -15,7 +15,7 @@
       >
         <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
           <div class="flex items-center justify-between">
-            <h3 class="text-2xl">Edit Channel</h3>
+            <h3 class="text-2xl">Edit Profile</h3>
             <svg
               @click="isOpen = false"
               xmlns="http://www.w3.org/2000/svg"
@@ -41,14 +41,14 @@
             <div class="my-2">
               <input
                 type="text"
-                placeholder="Channel Name"
+                placeholder="User Name"
                 class="w-full rounded-md"
               />
             </div>
             <div class="my-2">
               <input
                 type="text"
-                placeholder="Description"
+                placeholder="Email Address"
                 class="w-full rounded-md"
               />
             </div>
@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  name: "EditChannel",
+  name: "EditProfile",
   data() {
     return {
       isOpen: false,
