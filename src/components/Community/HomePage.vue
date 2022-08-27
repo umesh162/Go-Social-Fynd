@@ -1,17 +1,19 @@
 <template>
   <div class="">
-    <button>Click</button>
-    <JoinRequest />
-    <CommList />
+    <!-- <button>Click</button> -->
+    <!-- <JoinRequest /> -->
+    <MainPage />
+    <!-- <CommList /> -->
   </div>
 </template>
 
 <script>
-import CommList from "./CommList.vue";
-import JoinRequest from "./JoinRequest.vue";
+// import CommList from "./CommList.vue";
+// import JoinRequest from "./JoinRequest.vue";
+import MainPage from "./MainPage.vue";
 export default {
   name: "HomePage",
-  components: { CommList, JoinRequest },
+  components: { MainPage },
 };
 </script>
 

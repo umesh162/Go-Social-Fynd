@@ -10,14 +10,14 @@
       </button>
 
       <div
-        v-show="isOpen"
+        v-show="true"
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
         <form class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
           <div class="flex items-center justify-between w-96">
             <h3 class="text-2xl">Create Post</h3>
             <svg
-              @click="isOpen = false"
+              @click="toggle"
               xmlns="http://www.w3.org/2000/svg"
               class="w-8 h-8 text-red-900 cursor-pointer"
               fill="none"
@@ -71,6 +71,12 @@
 <script>
 export default {
   name: "CreatePost",
+  props: {
+    toggle: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       isOpen: false,

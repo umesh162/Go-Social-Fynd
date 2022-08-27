@@ -1,8 +1,7 @@
 <template>
   <div class="overflow-hidden">
-    <div class="grid grid-cols-3 gap-4 grid-rows-6 h-96">
+    <div class="grid grid-cols-3 grid-rows-6 h-screen px-10 pt-5 bg-white">
       <CommList />
-
       <PostSection />
       <ProfileSection />
     </div>
@@ -13,7 +12,10 @@
 import ProfileSection from "../Profile/ProfileSection.vue";
 import PostSection from "./PostSection.vue";
 import CommList from "./CommList.vue";
-export default { components: { ProfileSection, PostSection, CommList } };
+
+export default {
+  components: { ProfileSection, PostSection, CommList },
+};
 </script>
 
 <style></style>
