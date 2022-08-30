@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-hidden">
-    <div class="grid grid-cols-3 grid-rows-6 h-screen px-10 pt-5 bg-white">
+    <div class="grid grid-cols-3 h-screen px-10 pt-5 bg-white">
       <CommList />
       <PostSection />
       <ProfileSection />

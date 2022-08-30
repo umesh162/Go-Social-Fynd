@@ -1,19 +1,30 @@
 <template>
   <div class="">
-    <!-- <button>Click</button> -->
-    <!-- <JoinRequest /> -->
-    <MainPage />
-    <!-- <CommList /> -->
+    <div v-if="userJoinComm.length === 0">
+      <!-- <div v-if="0 === 0"> -->
+      <NewUser />
+    </div>
+    <div v-else>
+      <MainPage />
+    </div>
   </div>
 </template>
 
 <script>
-// import CommList from "./CommList.vue";
-// import JoinRequest from "./JoinRequest.vue";
+import { mapState } from "vuex";
+import NewUser from "./NewUser.vue";
 import MainPage from "./MainPage.vue";
+
 export default {
   name: "HomePage",
-  components: { MainPage },
+  components: { NewUser, MainPage },
+  computed: {
+    ...mapState("comm", ["commList", "userJoinComm"]),
+  },
+  async created() {
+    await this.$store.dispatch("comm/getUserJoinComm");
+    await this.$store.dispatch("comm/getAllCOmmunity");
+  },
 };
 </script>
 

@@ -5,7 +5,7 @@
     <div class="py-10 bg-white top-0 sticky">
       <p class="text-center font-bold text-lg">Post</p>
     </div>
-    <div v-for="index in 20" :key="index">
+    <div v-for="item in commPost" :key="item._id">
       <div class="m-4 border-2 rounded-lg py-3 shadow-lg">
         <div class="flex items-center px-3 pb-1">
           <div class="rounded-full w-16">
@@ -16,7 +16,13 @@
             />
           </div>
           <div class="flex-1 mx-4">
-            <h3>Umesh Palival</h3>
+            <h3>
+              {{
+                item.createdBy.user.firstname +
+                " " +
+                item.createdBy.user.lastname
+              }}
+            </h3>
             <p>Posted 2 hours ago</p>
           </div>
           <div>
@@ -26,7 +32,11 @@
           </div>
         </div>
         <div class="border-y-2">
-          <img src="../../assets/home-comm.png" alt="Home community" />
+          <img
+            :src="item.Image"
+            alt="Home community"
+            class="object-contain p-2 bg-slate-50 h-64 w-full"
+          />
           <div class="w-full">
             <p class="px-3">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit.
@@ -67,12 +77,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import CreatePost from "./CreatePost.vue";
 export default {
   name: "PostSection",
   components: { CreatePost },
   data() {
     return { visible: false };
+  },
+  computed: {
+    ...mapState("comm", ["commPost"]),
   },
   methods: {
     toggle() {
