@@ -3,4 +3,5 @@ export default {
   userJoinComm: [],
   singleChannel: [],
   commPost: [],
+  comments: [],
 };

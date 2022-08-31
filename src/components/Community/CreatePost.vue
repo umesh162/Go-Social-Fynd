@@ -38,21 +38,14 @@
                 type="text"
                 placeholder="Description"
                 class="w-full rounded-md"
+                v-model="des"
               />
             </div>
-            <div>
-              <p>Choose Channel</p>
-              <input type="radio" id="vehicle1" name="vehicle1" value="Bike" />
-              <label for="vehicle1"> I have a bike</label><br />
-              <input type="radio" id="vehicle2" name="vehicle2" value="Car" />
-              <label for="vehicle2"> I have a car</label><br />
-            </div>
-
-            <div class="flex justify-center my-2">
-              <button class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">
-                Save
-              </button>
-            </div>
+          </div>
+          <div>
+            <button type="submit" v-on:click.prevent="createPost">
+              Submit
+            </button>
           </div>
         </form>
       </div>
@@ -61,6 +54,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "CreatePost",
   props: {
@@ -69,10 +63,26 @@ export default {
       required: true,
     },
   },
+  computed: {
+    ...mapState("comm", ["singleChannel"]),
+  },
   data() {
     return {
       isOpen: false,
+      des: "",
     };
+  },
+
+  methods: {
+    async createPost() {
+      let payload = {
+        title: this.des,
+        communityName: this.singleChannel.data._id,
+      };
+      console.log(payload);
+      await this.$store.dispatch("comm/CreatePost", payload);
+      this.toggle();
+    },
   },
 };
 </script>

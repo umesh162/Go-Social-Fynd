@@ -18,9 +18,9 @@
           <div class="flex-1 mx-4">
             <h3>
               {{
-                item.createdBy.user.firstname +
+                item.createdBy.user[0].firstname +
                 " " +
-                item.createdBy.user.lastname
+                item.createdBy.user[0].lastname
               }}
             </h3>
             <p>Posted 2 hours ago</p>
@@ -38,23 +38,28 @@
             class="object-contain p-2 bg-slate-50 h-64 w-full"
           />
           <div class="w-full">
-            <p class="px-3">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Delectus, esse? Dignissimos laborum itaque dolores est magnam, qui
-              laboriosam temporibus in suscipit nulla reiciendis ratione debitis
-              accusantium cumque sunt nemo maxime.
-            </p>
+            <p class="px-3">{{ item.title }}</p>
           </div>
         </div>
         <div class="flex items-center justify-around pt-2">
           <div>
-            <button class="">
-              <i class="fa-regular fa-heart"></i>
+            <button
+              class=""
+              v-on:click.prevent="
+                item.isLike ? postUnlike(item._id) : postLike(item._id)
+              "
+            >
+              <i
+                class="fa-solid fa-heart"
+                style="color: blue"
+                v-if="item.isLike"
+              ></i>
+              <i class="fa-regular fa-heart" v-else></i>
               Like
             </button>
           </div>
           <div>
-            <button>
+            <button v-on:click.prevent="commentOnPost(item._id)">
               <i class="fa-regular fa-comment"></i>
               Comments
             </button>
@@ -92,6 +97,28 @@ export default {
     toggle() {
       console.log("clickkk", this.visible);
       this.visible = !this.visible;
+    },
+    async postLike(id) {
+      let payload = {
+        postId: id,
+      };
+      await this.$store.dispatch("comm/LikePost", payload);
+    },
+
+    async postUnlike(id) {
+      let payload = {
+        postId: id,
+      };
+      await this.$store.dispatch("comm/UnLikePost", payload);
+    },
+
+    async commentOnPost(id) {
+      let payload = {
+        postId: id,
+        comment: "Testing Comments",
+      };
+
+      await this.$store.dispatch("comm/Comment", payload);
     },
   },
 };

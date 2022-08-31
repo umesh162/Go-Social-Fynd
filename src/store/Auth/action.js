@@ -7,6 +7,7 @@ export default {
         `${Config.baseUrl}/auth/Login`,
         payload
       );
+      console.log("------", data);
       commit("loginUser", data);
       localStorage.setItem(Config.TOKEN_KEY, data.token);
     } catch (e) {

@@ -29,7 +29,7 @@
               <div
                 class="flex items-center justify-center w-full h-60 border-2 border-dashed border-red-400"
               >
-                <input type="file" />
+                <input type="file" @change="onFileSelected" accept="image/*" />
               </div>
             </div>
             <div class="my-2">
@@ -48,7 +48,6 @@
             </div>
             <div class="flex justify-around">
               <button
-                @click="toggle"
                 class="w-24 py-2 text-blue-800 border border-blue-600 rounded"
               >
                 Public
@@ -61,7 +60,6 @@
             </div>
             <div class="my-2 flex justify-around">
               <button
-                @click="toggle"
                 class="w-24 py-2 text-blue-800 border border-blue-600 rounded"
               >
                 Admin
@@ -79,7 +77,11 @@
               >
                 Cancel
               </button>
-              <button class="w-24 py-2 text-blue-100 bg-blue-600 rounded">
+              <button
+                type="submit"
+                class="w-24 py-2 text-blue-100 bg-blue-600 rounded"
+                @click="submitImage"
+              >
                 Save
               </button>
             </div>
@@ -102,7 +104,20 @@ export default {
   data() {
     return {
       isOpen: false,
+      selectedFile: null,
     };
+  },
+  methods: {
+    onFileSelected(e) {
+      this.selectedFile = e.target.files[0];
+    },
+
+    async submitImage() {
+      const { url } = await fetch("http://localhost:3000/s3Path/ImgUrl").then(
+        (res) => res.json()
+      );
+      console.log(url);
+    },
   },
 };
 </script>

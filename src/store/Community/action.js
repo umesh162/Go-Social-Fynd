@@ -66,7 +66,7 @@ export default {
 
   async CommAllPost({ commit }, payload) {
     try {
-      const { data } = await await axios.post(
+      const { data } = await axios.post(
         `${Config.baseUrl}/posts/getByCommunity`,
         payload,
         {
@@ -76,6 +76,68 @@ export default {
         }
       );
       commit("getCommPost", data);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async CreatePost({ commit }, payload) {
+    try {
+      const { data } = await axios.post(
+        `${Config.baseUrl}/posts/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      commit("addPost", data);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async LikePost(payload) {
+    try {
+      await axios.post(`${Config.baseUrl}/likes/likePost`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      // commit("addPost", data);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async UnLikePost(payload) {
+    try {
+      await axios.post(`${Config.baseUrl}/likes/removelike`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(localStorage.getItem("token"));
+
+      // commit("addPost", data);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async Comment({ commit }, payload) {
+    try {
+      const { data } = await axios.post(
+        `${Config.baseUrl}/comment/addAComment`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      commit("allComments", data);
     } catch (e) {
       console.log(e);
     }

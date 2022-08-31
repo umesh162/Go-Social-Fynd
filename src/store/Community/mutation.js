@@ -11,4 +11,10 @@ export default {
   getCommPost(state, payload) {
     state.commPost = payload;
   },
+  addPost(state, payload) {
+    state.commPost.push(payload);
+  },
+  allComments(state, payload) {
+    state.comments.push(payload);
+  },
 };

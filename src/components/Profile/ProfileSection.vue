@@ -5,11 +5,13 @@
     <div>
       <div class="sticky top-0 py-7 bg-white">
         <div class="flex mx-11 my-3 justify-end">
-          <button
+          <router-link
+            to="/"
+            v-on:click="logout()"
             class="text-lg font-semibold text-black-500 bg-blue-400 px-3 py-1 rounded-lg hover:bg-red-500"
           >
             Logout
-          </button>
+          </router-link>
         </div>
       </div>
       <div class="shadow-lg p-3 rounded-lg mt-5">
@@ -22,7 +24,13 @@
               class="h-24"
             />
             <div class="text-center">
-              <p class="">Umesh Palival jkhkhkhkhkjjjjj</p>
+              <p class="">
+                {{
+                  user.user.firstname.toUpperCase() +
+                  " " +
+                  user.user.lastname.toUpperCase()
+                }}
+              </p>
             </div>
           </div>
         </div>
@@ -41,34 +49,62 @@
           </div>
         </div>
       </div>
-      <div class="shadow-lg p-3 rounded-lg">
-        <h3 class="text-left py-2 font-semibold">Channel Details</h3>
+      <div v-show="singleChannel">
+        <div class="shadow-lg p-3 rounded-lg">
+          <h3 class="text-left py-2 font-semibold">Channel Details</h3>
 
-        <div class="flex items-center">
-          <div class="w-16">
-            <img
-              :src="singleChannel.data.communityImage"
-              alt="Home community"
-              class="h-16 rounded-full"
-            />
+          <div class="flex items-center">
+            <div class="w-16">
+              <img
+                :src="singleChannel.data.communityImage"
+                alt="Home community"
+                class="h-16 rounded-full"
+              />
+            </div>
+            <div class="flex flex-col flex-1 ml-2">
+              <p>{{ singleChannel.data.communityName }}</p>
+              <p>{{ singleChannel.data.type }}</p>
+              <p>
+                Admin:
+                <span
+                  >{{ singleChannel.data.createdBy.user.firstname }}
+                  {{ singleChannel.data.createdBy.user.lastname }}</span
+                >
+              </p>
+            </div>
           </div>
-          <div class="flex flex-col flex-1 ml-2">
-            <p>{{ singleChannel.data.communityName }}</p>
-            <p>Private</p>
-            <p>Admin: <span>Mark </span></p>
-          </div>
-          <div class="w-32">
+          <div class="flex justify-between mt-2">
+            <!-- <div class="w-36">
             <button
               class="bg-blue-400 py-1 rounded w-full"
               @click="editChnToggle"
             >
               <i class="fa-solid fa-pen-to-square"></i>
-              Edit Channel
+              Edit Community
             </button>
+          </div> -->
+            <div class="w-40">
+              <button
+                class="bg-blue-400 py-1 rounded w-full"
+                @click="editChnToggle"
+              >
+                <i class="fa-solid fa-pen-to-square"></i>
+                leave Community
+              </button>
+            </div>
+            <!-- <div class="w-40">
+            <button
+              class="bg-blue-400 py-1 rounded w-full"
+              @click="editChnToggle"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+              Delete Community
+            </button>
+          </div> -->
           </div>
         </div>
+        <JoinRequest />
       </div>
-      <JoinRequest />
     </div>
     <div v-show="visible">
       <CreatePost :toggle="toggle" />
@@ -96,6 +132,7 @@ export default {
   },
   computed: {
     ...mapState("comm", ["singleChannel"]),
+    ...mapState("auth", ["user"]),
   },
   methods: {
     toggle() {
@@ -109,6 +146,14 @@ export default {
     editChnToggle() {
       console.log("edit Channel Call", this.editChannel);
       this.editChannel = !this.editChannel;
+    },
+    async logout() {
+      console.log("click");
+      try {
+        await this.$store.dispatch("auth/logoutAction");
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };

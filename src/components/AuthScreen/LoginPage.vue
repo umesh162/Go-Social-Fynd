@@ -189,7 +189,7 @@ export default {
         try {
           await this.$store.dispatch("auth/loginUserAction", payload);
 
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: "home" });
         } catch (e) {
           this.errMsg = "Login failed";
           console.log(e);
