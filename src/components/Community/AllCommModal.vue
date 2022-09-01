@@ -5,7 +5,7 @@
         v-show="true"
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
-        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
+        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl w-3/5">
           <div class="flex justify-between">
             <h3 class="text-2xl">Community List</h3>
             <svg
@@ -28,13 +28,16 @@
             <div>
               <input
                 placeholder="Search community"
-                class="border-2 border-gray-500 w-full my-3 p-2"
+                class="border-2 rounded-lg border-gray-500 w-full my-3 p-2"
+                type="text"
+                v-model="searchKey"
+                @change="srcProd"
               />
             </div>
-            <div class="h-96 overflow-auto">
+            <div class="h-96 overflow-auto cust-overflow-y-primary-color-grey">
               <div
                 class="flex items-center w-full my-5 shadow-lg rounded-lg border p-3"
-                v-for="index in commList"
+                v-for="index in srcProd()"
                 :key="index._id"
               >
                 <div class="w-24 px-2">
@@ -95,6 +98,7 @@ export default {
   data() {
     return {
       isOpen: false,
+      searchKey: "",
     };
   },
   computed: {
@@ -109,6 +113,13 @@ export default {
       await this.$store.dispatch("comm/getAllCOmmunity");
       await this.$store.dispatch("comm/getUserJoinComm");
     },
+    srcProd() {
+      let data = this.commList.length > 0 ? this.commList : [];
+
+      return data.filter((item) =>
+        item.communityName.toLowerCase().includes(this.searchKey.toLowerCase())
+      );
+    },
   },
   async created() {
     await this.$store.dispatch("comm/getAllCOmmunity");
@@ -116,4 +127,22 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.cust-overflow-y-primary-color-grey {
+  overflow-y: auto;
+}
+.cust-overflow-y-primary-color-grey::-webkit-scrollbar {
+  width: 8px;
+}
+.cust-overflow-y-primary-color-grey::-webkit-scrollbar-thumb:hover {
+  background: #c2c2c2;
+}
+.cust-overflow-y-primary-color-grey::-webkit-scrollbar-thumb {
+  background: #dddddd;
+  border-radius: 6px;
+}
+.cust-overflow-y-primary-color-grey::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 3px #31313126;
+  border-radius: 6px;
+}
+</style>

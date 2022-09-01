@@ -5,12 +5,18 @@
     <div class="sticky top-0 bg-white p-5">
       <h2 class="font-bold text-lg text-center">Community</h2>
 
-      <input type="text" placeholder="Search" class="w-full rounded-md" />
+      <input
+        type="text"
+        placeholder="Search"
+        class="w-full rounded-md"
+        v-model="searchKey"
+        @change="srcProd"
+      />
     </div>
     <div></div>
     <div class="px-3">
       <h3>Joined Community</h3>
-      <div v-for="item in userJoinComm" :key="item._id" class="">
+      <div v-for="item in srcProd()" :key="item._id" class="">
         <div
           class="flex items-center m-2 border-2 p-1 rounded-lg shadow-lg"
           v-on:click="singleChannel(item._id)"
@@ -82,6 +88,9 @@
 import { mapState } from "vuex";
 export default {
   name: "CommList",
+  data() {
+    return { searchKey: "" };
+  },
   computed: {
     ...mapState("comm", ["userJoinComm", "commList"]),
   },
@@ -97,6 +106,13 @@ export default {
       await this.$store.dispatch("comm/joinCommunity", payload);
       await this.$store.dispatch("comm/getAllCOmmunity");
       await this.$store.dispatch("comm/getUserJoinComm");
+    },
+    srcProd() {
+      let data = this.userJoinComm.length > 0 ? this.userJoinComm : [];
+
+      return data.filter((item) =>
+        item.communityName.toLowerCase().includes(this.searchKey.toLowerCase())
+      );
     },
   },
 };

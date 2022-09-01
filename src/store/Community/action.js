@@ -1,6 +1,23 @@
 import Config from "@/config";
 import axios from "axios";
 export default {
+  async createCommunity(temp, payload) {
+    try {
+      const { data } = await axios.post(
+        `${Config.baseUrl}/community/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("response", data);
+    } catch (e) {
+      console.log();
+    }
+  },
+
   async getAllCOmmunity({ commit }) {
     try {
       const { data } = await axios.post(
@@ -98,7 +115,7 @@ export default {
     }
   },
 
-  async LikePost(payload) {
+  async LikePost(temp, payload) {
     try {
       await axios.post(`${Config.baseUrl}/likes/likePost`, payload, {
         headers: {
@@ -111,7 +128,7 @@ export default {
     }
   },
 
-  async UnLikePost(payload) {
+  async UnLikePost(temp, payload) {
     try {
       await axios.post(`${Config.baseUrl}/likes/removelike`, payload, {
         headers: {
