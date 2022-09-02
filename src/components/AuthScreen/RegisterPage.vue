@@ -33,7 +33,9 @@
             </div>
             <div v-if="$v.firstName.$error">
               <div v-if="!$v.firstName.required" class="error-message">
-                <small>The FirstName field is required</small>
+                <small class="text-red-600"
+                  >The FirstName field is required</small
+                >
               </div>
             </div>
             <div class="mb-6">
@@ -54,7 +56,9 @@
             </div>
             <div v-if="$v.lastName.$error">
               <div v-if="!$v.lastName.required" class="error-message">
-                <small>The Last Name field is required</small>
+                <small class="text-red-600"
+                  >The Last Name field is required</small
+                >
               </div>
             </div>
             <div class="mb-6">
@@ -75,10 +79,10 @@
             </div>
             <div v-if="$v.email.$error">
               <div v-if="!$v.email.required" class="error-message">
-                <small>The email field is required</small>
+                <small class="text-red-600">The email field is required</small>
               </div>
               <div v-if="!$v.email.email" class="error-message">
-                <small>Invalid email address</small>
+                <small class="text-red-600">Invalid email address</small>
               </div>
             </div>
 
@@ -100,7 +104,7 @@
             </div>
             <div v-if="$v.phone.$error">
               <div v-if="!$v.phone.required" class="error-message">
-                <small>The phone field is required</small>
+                <small class="text-red-600">The phone field is required</small>
               </div>
             </div>
 
@@ -123,26 +127,32 @@
             </div>
             <div v-if="$v.password.$error">
               <div v-if="!$v.password.required" class="error-message">
-                <small>The password field is required</small>
+                <small class="text-red-600"
+                  >The password field is required</small
+                >
               </div>
               <div v-if="!$v.password.minLength" class="error-message">
-                <small>The password must have at least 8 characters</small>
+                <small class="text-red-600"
+                  >The password must have at least 8 characters</small
+                >
               </div>
               <div v-if="!$v.password.containsUppercase" class="error-message">
-                <small
+                <small class="text-red-600"
                   >The password must have at least 1 uppercase character</small
                 >
               </div>
               <div v-if="!$v.password.containsLowercase" class="error-message">
-                <small
+                <small class="text-red-600"
                   >The password must have at least 1 lowercase character</small
                 >
               </div>
               <div v-if="!$v.password.containsNumber" class="error-message">
-                <small>The password must have at least 1 digit</small>
+                <small class="text-red-600"
+                  >The password must have at least 1 digit</small
+                >
               </div>
               <div v-if="!$v.password.containsSpecial" class="error-message">
-                <small
+                <small class="text-red-600"
                   >The password must have at least 1 special character</small
                 >
               </div>
@@ -165,12 +175,46 @@
             </div>
 
             <div class="text-center lg:text-left">
-              <button
-                type="submit"
-                class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-              >
-                Signup
-              </button>
+              <div>
+                <div class="flex items-center justify-start" v-if="!isLoading">
+                  <button
+                    type="submit"
+                    v-on:click.prevent="signUp"
+                    class="inline-flex items-center px-10 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out bg-blue-600 rounded-md shadow hover:bg-blue-500"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+                <div class="flex items-center justify-start" v-else>
+                  <button
+                    type="button"
+                    class="inline-flex items-center px-3 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out bg-blue-600 rounded-md shadow opacity-50 cursor-not-allowed"
+                    disabled="true"
+                  >
+                    <svg
+                      class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      ></circle>
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Loading...
+                  </button>
+                </div>
+              </div>
               <p class="text-sm font-semibold mt-2 pt-1 mb-0">
                 Already have an account?
                 <router-link
@@ -200,6 +244,7 @@ export default {
       phone: "",
       password: "",
       confirmPassword: "",
+      isLoading: "",
     };
   },
   validations: {
@@ -255,9 +300,19 @@ export default {
             email: this.email,
             password: this.password,
           };
-          await this.$store.dispatch("auth/registerUserAction", payload);
-          alert("User registered successfully");
-          this.$router.push("/login");
+          this.isLoading = true;
+          let response = await this.$store.dispatch(
+            "auth/registerUserAction",
+            payload
+          );
+          if (response.code === 400) {
+            this.isLoading = false;
+            this.$swal.fire(response.msg, "", "error");
+          } else {
+            this.isLoading = false;
+            this.$swal.fire(response.msg, "", "success");
+            this.$router.push({ name: "login" });
+          }
         } else {
           alert("Password and confirm password does not match");
         }

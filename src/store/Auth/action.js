@@ -3,32 +3,46 @@ import axios from "axios";
 export default {
   async loginUserAction({ commit }, payload) {
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         `${Config.baseUrl}/auth/Login`,
         payload
       );
-      console.log("------", data);
-      commit("loginUser", data);
-      localStorage.setItem(Config.TOKEN_KEY, data.token);
+
+      commit("loginUser", response.data);
+      localStorage.setItem(Config.TOKEN_KEY, response.data.token);
+      return {
+        code: response.status,
+        msg: response.data.message,
+      };
     } catch (e) {
-      console.log();
+      return {
+        code: e.response.status,
+        msg: e.response.data.message,
+      };
     }
   },
-  async logoutAction({ commit }) {
-    try {
-      console.log("caaller");
-      commit("loginUser", {});
-      localStorage.clear();
-    } catch (e) {
-      console.log();
-    }
+
+  logout() {
+    localStorage.removeItem(Config.TOKEN_KEY, "");
+    return true;
   },
   async registerUserAction({ commit }, payload) {
     try {
-      await axios.post(`${Config.baseUrl}/auth/Register`, payload);
+      let response = await axios.post(
+        `${Config.baseUrl}/auth/Register`,
+        payload
+      );
       commit("registerSuccess", "Register success");
+      return {
+        code: response.status,
+        msg: response.data.message,
+      };
     } catch (e) {
-      console.log();
+      console.log(e.response);
+      return {
+        code: e.response.status,
+        msg: e.response.data.message,
+      };
     }
   },
 };

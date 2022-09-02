@@ -58,7 +58,7 @@
                 </div>
                 <div class="self-center w-44">
                   <button
-                    class="bg-violet-400 px-5 py-1 w-full rounded-lg hover:bg-violet-500"
+                    class="bg-blue-400 px-5 py-1 w-full rounded-lg hover:bg-blue-500"
                     @click.prevent="joinComm(index._id)"
                   >
                     Join

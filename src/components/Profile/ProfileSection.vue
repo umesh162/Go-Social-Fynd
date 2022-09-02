@@ -62,8 +62,15 @@
               />
             </div>
             <div class="flex flex-col flex-1 ml-2">
-              <p>{{ singleChannel.data.communityName }}</p>
-              <p>{{ singleChannel.data.type }}</p>
+              <div>
+                <span>{{ singleChannel.data.communityName }}</span>
+                <span class="ml-2 text-blue-400">{{
+                  singleChannel.data.type
+                }}</span>
+              </div>
+              <p>
+                {{ singleChannel.data.description }}
+              </p>
               <p>
                 Admin:
                 <span
@@ -73,34 +80,50 @@
               </p>
             </div>
           </div>
-          <div class="flex justify-between mt-2">
-            <!-- <div class="w-36">
-            <button
-              class="bg-blue-400 py-1 rounded w-full"
-              @click="editChnToggle"
+          <div
+            class="flex mt-2"
+            :class="
+              singleChannel.currentuser.role === 'owner'
+                ? 'justify-between'
+                : 'justify-center'
+            "
+          >
+            <div
+              class="w-36"
+              v-show="singleChannel.currentuser.role === 'owner'"
             >
-              <i class="fa-solid fa-pen-to-square"></i>
-              Edit Community
-            </button>
-          </div> -->
-            <div class="w-40">
               <button
                 class="bg-blue-400 py-1 rounded w-full"
                 @click="editChnToggle"
               >
                 <i class="fa-solid fa-pen-to-square"></i>
+                Edit Community
+              </button>
+            </div>
+            <div
+              class="w-40"
+              v-show="singleChannel.currentuser.role !== 'owner'"
+            >
+              <button
+                class="bg-blue-400 py-1 rounded w-full"
+                @click="leaveComm(singleChannel.data._id)"
+              >
+                <i class="fa-solid fa-pen-to-square"></i>
                 leave Community
               </button>
             </div>
-            <!-- <div class="w-40">
-            <button
-              class="bg-blue-400 py-1 rounded w-full"
-              @click="editChnToggle"
+            <div
+              class="w-40"
+              v-show="singleChannel.currentuser.role === 'owner'"
             >
-              <i class="fa-regular fa-trash-can"></i>
-              Delete Community
-            </button>
-          </div> -->
+              <button
+                class="bg-blue-400 py-1 rounded w-full"
+                @click="deleteComm(singleChannel.data._id)"
+              >
+                <i class="fa-regular fa-trash-can"></i>
+                Delete Community
+              </button>
+            </div>
           </div>
         </div>
         <JoinRequest />
@@ -136,17 +159,32 @@ export default {
   },
   methods: {
     toggle() {
-      console.log("clickkk", this.visible);
       this.visible = !this.visible;
     },
     editToggle() {
-      console.log("edit visible Call", this.editVisible);
       this.editVisible = !this.editVisible;
     },
     editChnToggle() {
-      console.log("edit Channel Call", this.editChannel);
       this.editChannel = !this.editChannel;
     },
+
+    async leaveComm(id) {
+      let payload = {
+        communityId: id,
+      };
+
+      await this.$store.dispatch("comm/leaveCommunity", payload);
+    },
+
+    async deleteComm(id) {
+      let payload = {
+        communityId: id,
+      };
+
+      await this.$store.dispatch("comm/deleteCommunity", payload);
+      alert("Success fully Delete");
+    },
+
     async logout() {
       console.log("click");
       try {

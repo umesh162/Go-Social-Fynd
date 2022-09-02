@@ -1,5 +1,6 @@
 <template>
-  <div class="overflow-hidden">
+  <div class="overflow-hidden h-screen">
+    <NavBar />
     <div class="grid grid-cols-3 h-screen px-10 pt-5 bg-white">
       <CommList />
       <PostSection />
@@ -12,9 +13,10 @@
 import ProfileSection from "../Profile/ProfileSection.vue";
 import PostSection from "./PostSection.vue";
 import CommList from "./CommList.vue";
+import NavBar from "../Utils/NavBar.vue";
 
 export default {
-  components: { ProfileSection, PostSection, CommList },
+  components: { ProfileSection, PostSection, CommList, NavBar },
 };
 </script>
 

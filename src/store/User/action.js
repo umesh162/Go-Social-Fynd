@@ -1,11 +1,10 @@
 import Config from "@/config";
 import axios from "axios";
 export default {
-  async UploadImage(payload) {
+  async updateUser(temp, payload) {
     try {
-      console.log("Payload", payload);
       const { data } = await axios.post(
-        `${Config.baseUrl}/user/uploadImg`,
+        `${Config.baseUrl}/user/profileChange`,
         payload,
         {
           headers: {

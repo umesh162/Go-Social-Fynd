@@ -1,22 +1,11 @@
 <template>
   <div
-    class="border-t-2 border-l-2 border-b-2 row-span-full border-slate-300 overflow-auto scroll-hidden before rounded-l-lg"
+    class="row-span-full border-slate-300 overflow-auto scroll-hidden before rounded-l-lg"
   >
-    <div class="sticky top-0 bg-white p-5">
-      <h2 class="font-bold text-lg text-center">Community</h2>
-
-      <input
-        type="text"
-        placeholder="Search"
-        class="w-full rounded-md"
-        v-model="searchKey"
-        @change="srcProd"
-      />
-    </div>
-    <div></div>
-    <div class="px-3">
-      <h3>Joined Community</h3>
-      <div v-for="item in srcProd()" :key="item._id" class="">
+    <!-- border-t-2 border-l-2 border-b-2 -->
+    <div class="px-1 pb-1 pt-2">
+      <h3 class="text-center text-lg font-semibold">Joined Community</h3>
+      <div v-for="item in userJoinComm" :key="item._id" class="">
         <div
           class="flex items-center m-2 border-2 p-1 rounded-lg shadow-lg"
           v-on:click="singleChannel(item._id)"
@@ -35,12 +24,21 @@
         </div>
       </div>
     </div>
-    <div>
-      <div class="px-3">
-        <h3>All Community</h3>
+    <div class="height overflow-auto scroll-hidden">
+      <div class="px-2">
+        <div class="sticky top-0 bg-white p-5">
+          <h3 class="text-center my-1 text-lg font-semibold">All Community</h3>
+          <input
+            type="text"
+            placeholder="Search Community"
+            class="w-full rounded-md"
+            v-model="searchKey"
+            @change="srcProd"
+          />
+        </div>
         <div
-          class="flex items-center w-full my-5 shadow-lg rounded-lg border p-3"
-          v-for="index in commList"
+          class="flex items-center justify-evenly w-full my-3 shadow-lg rounded-lg border p-3"
+          v-for="index in srcProd()"
           :key="index._id"
         >
           <div class="w-24 px-2">
@@ -59,15 +57,15 @@
               {{ index.description }}
             </p>
           </div>
-          <div class="self-center w-44">
+          <div class="self-center w-44 text-center">
             <button
-              class="bg-violet-400 px-5 py-1 w-full rounded-lg hover:bg-violet-500"
+              class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-semibold rounded-full text-md py-2 px-8 text-center"
               @click.prevent="joinNewChannel(index._id)"
             >
               Join
             </button>
           </div>
-
+          <!-- class="bg-blue-400 px-5 py-1 w-full rounded-lg hover:bg-blue-500" -->
           <!-- <div class="self-center w-44">
                 <button class="bg-red-500 px-5 py-1 w-full rounded-lg hover:bg-red-700">
                   Join Request
@@ -103,12 +101,18 @@ export default {
       let payload = {
         communityId: id,
       };
-      await this.$store.dispatch("comm/joinCommunity", payload);
-      await this.$store.dispatch("comm/getAllCOmmunity");
-      await this.$store.dispatch("comm/getUserJoinComm");
+
+      let response = await this.$store.dispatch("comm/joinCommunity", payload);
+      if (response.code === 400) {
+        this.$swal.fire(response.msg, "", "error");
+      } else {
+        this.$swal.fire(response.msg, "", "success");
+        await this.$store.dispatch("comm/getAllCOmmunity");
+        await this.$store.dispatch("comm/getUserJoinComm");
+      }
     },
     srcProd() {
-      let data = this.userJoinComm.length > 0 ? this.userJoinComm : [];
+      let data = this.commList.length > 0 ? this.commList : [];
 
       return data.filter((item) =>
         item.communityName.toLowerCase().includes(this.searchKey.toLowerCase())
@@ -127,5 +131,9 @@ export default {
 .scroll-hidden::-webkit-scrollbar {
   /* Firefox */
   display: none;
+}
+
+.height {
+  height: 445px;
 }
 </style>

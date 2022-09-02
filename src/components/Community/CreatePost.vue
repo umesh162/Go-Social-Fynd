@@ -50,6 +50,25 @@
                 </div>
               </div>
             </div>
+            <div>
+              <label>Choose Community</label>
+              <fieldset v-for="item in userJoinComm" :key="item._id">
+                <div class="flex items-center mb-4">
+                  <input
+                    type="radio"
+                    :value="item._id"
+                    v-model="form.channelChoose"
+                    class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    for="country-option-1"
+                    class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    {{ item.communityName }}
+                  </label>
+                </div>
+              </fieldset>
+            </div>
           </form>
           <div>
             <div class="flex items-center justify-center" v-if="!isLoading">
@@ -112,7 +131,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("comm", ["singleChannel"]),
+    ...mapState("comm", ["singleChannel", "userJoinComm"]),
   },
   data() {
     return {
@@ -124,6 +143,7 @@ export default {
       form: {
         channelId: "",
         des: "",
+        channelChoose: "",
       },
     };
   },
@@ -155,13 +175,25 @@ export default {
 
     async handleSubmit() {
       let payload = {
-        communityName: this.singleChannel.data._id,
+        communityName: this.form.channelChoose,
         title: this.form.des,
         Image: this.imgS3Url,
       };
-      console.log(payload);
-      await this.$store.dispatch("comm/CreatePost", payload);
-      this.toggle();
+
+      let response = await this.$store.dispatch("comm/CreatePost", payload);
+      if (response.code === 400) {
+        this.$swal.fire(response.msg, "", "error");
+      } else {
+        this.$swal.fire("Post Created", "", "success");
+        await this.$store.dispatch("comm/singleChannInfo", {
+          _id: this.form.channelChoose,
+        });
+
+        await this.$store.dispatch("comm/CommAllPost", {
+          getByCommunity: this.form.channelChoose,
+        });
+        this.toggle();
+      }
     },
   },
 };

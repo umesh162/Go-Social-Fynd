@@ -1,4 +1,7 @@
 import Vue from "vue";
+
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 import App from "./App.vue";
 import "./index.css";
 import "flowbite";
@@ -8,15 +11,12 @@ import store from "./store/index";
 import Vuelidate from "vuelidate";
 import Router from "vue-router";
 import router from "./router";
-import Cloudinary from "cloudinary-vue";
+
 Vue.config.productionTip = false;
-Vue.use(Cloudinary, {
-  configuration: {
-    cloudName: "djkwbh7hu",
-  },
-});
+
 Vue.use(Router);
 Vue.use(Vuelidate);
+Vue.use(VueSweetalert2);
 new Vue({
   store,
   router,

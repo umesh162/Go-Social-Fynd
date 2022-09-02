@@ -37,7 +37,55 @@ export default {
   async joinCommunity(_, payload) {
     console.log("From action", payload);
     try {
-      await axios.post(`${Config.baseUrl}/community/joinCommunity`, payload, {
+      let response = await axios.post(
+        `${Config.baseUrl}/community/joinCommunity`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log;
+      return {
+        code: response.status,
+        msg: response.data.msg,
+      };
+    } catch (e) {
+      return {
+        code: e.response.status,
+        msg: e.response.data.msg,
+      };
+    }
+  },
+
+  async editCommunity(temp, payload) {
+    try {
+      await axios.post(`${Config.baseUrl}/community/editCommunity`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async leaveCommunity(temp, payload) {
+    try {
+      await axios.post(`${Config.baseUrl}/community/leaveCommunity`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async deleteCommunity(temp, payload) {
+    try {
+      await axios.post(`${Config.baseUrl}/community/deleteCommunity`, payload, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -100,7 +148,7 @@ export default {
 
   async CreatePost({ commit }, payload) {
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         `${Config.baseUrl}/posts/create`,
         payload,
         {
@@ -109,7 +157,27 @@ export default {
           },
         }
       );
-      commit("addPost", data);
+      commit("addPost", response.data);
+      return {
+        code: response.status,
+        msg: response.data.msg,
+      };
+    } catch (e) {
+      return {
+        code: e.response.status,
+        msg: e.response.data.msg,
+      };
+    }
+  },
+
+  async DeletePost(temp, payload) {
+    try {
+      await axios.post(`${Config.baseUrl}/posts/deleteMyPost`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      alert("Delete Success Fully");
     } catch (e) {
       console.log(e);
     }
